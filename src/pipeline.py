@@ -2,10 +2,31 @@
 from pathlib import Path
 from src.extractor.detect import detect_doc_type
 from src.extractor.native import extract_native
-from src.extractor.ocr import extract_ocr
+from src.extractor.ocr import extract_ocr, extract_ocr_from_image
 from src.llm.extractor import extract_fields
 from src.validator.checks import validate
 from src.validator.schema import ExtractedDocument
+
+IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".webp"}
+
+
+def process_image(image_path: str | Path) -> dict:
+    """Process a raw image file (JPG/PNG/etc.) through OCR then LLM extraction."""
+    from PIL import Image
+    path = Path(image_path)
+    img = Image.open(path).convert("RGB")
+    raw_text = extract_ocr_from_image(img)
+    extracted = extract_fields(raw_text)
+    document, flags = validate(extracted)
+    return {
+        "path": str(path),
+        "doc_format": "image_ocr",
+        "raw_text": raw_text,
+        "extracted": extracted,
+        "document": document,
+        "flags": flags,
+        "ok": len(flags) == 0,
+    }
 
 
 def process_document(pdf_path: str | Path) -> dict:
