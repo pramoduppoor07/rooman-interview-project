@@ -5,7 +5,8 @@ SYSTEM_PROMPT = """You are a document data extractor. Given raw text from a fina
 extract structured fields and return them as a single JSON object.
 
 Rules:
-- Identify the document type: "invoice", "receipt", or "purchase_order"
+- Identify the document type. Use ONLY one of these exact strings: "invoice", "receipt", "purchase_order".
+  Bills, tax invoices, GST invoices, proformas → "invoice". Cash memos, payment receipts → "receipt". POs → "purchase_order".
 - Extract all fields you can find. Use null for fields that are missing or not applicable.
 - Do NOT hallucinate values. If a field is absent from the text, set it to null.
 - For monetary values, return numbers (not strings), e.g. 8605.88 not "$8,605.88"

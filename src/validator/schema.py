@@ -38,4 +38,13 @@ class ExtractedDocument(BaseModel):
     @field_validator("doc_type", mode="before")
     @classmethod
     def normalize_doc_type(cls, v: str) -> str:
-        return v.lower().strip() if isinstance(v, str) else v
+        if not isinstance(v, str):
+            return v
+        v = v.lower().strip()
+        if any(k in v for k in ("invoice", "bill", "tax inv", "proforma", "debit note", "credit note")):
+            return "invoice"
+        if any(k in v for k in ("receipt", "payment receipt", "cash memo")):
+            return "receipt"
+        if any(k in v for k in ("purchase order", "purchase_order", "po ", "p.o.")):
+            return "purchase_order"
+        return v
