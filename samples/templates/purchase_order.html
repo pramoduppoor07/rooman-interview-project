@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Georgia, "Times New Roman", serif; font-size: 12px; color: #1a1a1a; margin: 36px 44px; }
+  .header-table { width: 100%; border-bottom: 3px solid #2c5f2e; padding-bottom: 14px; margin-bottom: 22px; }
+  .org-name { font-size: 20px; font-weight: bold; color: #2c5f2e; }
+  .org-sub { font-size: 10px; color: #666; margin-top: 4px; line-height: 1.6; }
+  .po-title { font-size: 18px; color: #2c5f2e; letter-spacing: 1px; text-align: right; }
+  .meta-label { color: #777; text-align: right; font-size: 11px; }
+  .meta-value { font-weight: bold; font-size: 11px; }
+  .parties-table { width: 100%; margin-bottom: 22px; border-collapse: collapse; }
+  .party-box { border: 1px solid #ccc; padding: 10px 12px; vertical-align: top; width: 33%; }
+  .party-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #2c5f2e; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 6px; font-weight: bold; }
+  .party-body { font-size: 11px; line-height: 1.7; }
+  .meta-row-table { width: 100%; background-color: #f6faf6; border: 1px solid #c8dfc8; padding: 10px 14px; margin-bottom: 22px; border-collapse: collapse; }
+  .meta-cell { padding: 4px 10px; vertical-align: top; }
+  .meta-cell-label { font-size: 10px; text-transform: uppercase; color: #777; letter-spacing: 1px; display: block; }
+  .meta-cell-val { font-weight: bold; font-size: 12px; }
+  table.items { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+  table.items thead tr { background-color: #2c5f2e; color: white; }
+  table.items th { padding: 8px 10px; text-align: left; font-size: 11px; font-weight: normal; }
+  table.items th.right { text-align: right; }
+  table.items th.center { text-align: center; }
+  table.items td { padding: 7px 10px; border-bottom: 1px solid #ddd; font-size: 11px; }
+  table.items td.right { text-align: right; }
+  table.items td.center { text-align: center; }
+  table.items tbody tr.alt { background-color: #f6faf6; }
+  .totals-table { width: 260px; margin-left: auto; border-collapse: collapse; }
+  .totals-table td { padding: 5px 10px; font-size: 12px; }
+  .totals-table td.lbl { color: #555; }
+  .totals-table td.amt { text-align: right; font-weight: bold; }
+  .totals-table tr.grand td { border-top: 2px solid #2c5f2e; color: #2c5f2e; font-size: 13px; padding-top: 8px; }
+  .terms-section { margin-top: 40px; border-top: 1px solid #ddd; padding-top: 12px; font-size: 10px; color: #666; }
+  .terms-title { color: #2c5f2e; margin-bottom: 5px; font-size: 11px; font-weight: bold; }
+  .sig-table { width: 100%; margin-top: 30px; }
+  .sig-line { border-top: 1px solid #555; margin-bottom: 4px; }
+  .sig-label { font-size: 10px; color: #777; }
+</style>
+</head>
+<body>
+  <table class="header-table">
+    <tr>
+      <td style="vertical-align:top; width:55%;">
+        <div class="org-name">{{ buyer_org }}</div>
+        <div class="org-sub">{{ buyer_address }}<br>{{ buyer_email }} | {{ buyer_phone }}</div>
+      </td>
+      <td style="vertical-align:top; text-align:right;">
+        <div class="po-title">PURCHASE ORDER</div>
+        <table style="margin-top:8px; margin-left:auto;">
+          <tr><td class="meta-label">PO Number&nbsp;</td><td class="meta-value">{{ po_number }}</td></tr>
+          <tr><td class="meta-label">Issue Date&nbsp;</td><td class="meta-value">{{ issue_date }}</td></tr>
+          <tr><td class="meta-label">Required By&nbsp;</td><td class="meta-value">{{ delivery_date }}</td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <table class="parties-table">
+    <tr>
+      <td class="party-box">
+        <div class="party-title">Vendor / Supplier</div>
+        <div class="party-body"><strong>{{ vendor_name }}</strong><br>{{ vendor_address }}<br>{{ vendor_contact }}</div>
+      </td>
+      <td style="width:2%;"></td>
+      <td class="party-box">
+        <div class="party-title">Ship To</div>
+        <div class="party-body"><strong>{{ ship_to_name }}</strong><br>{{ ship_to_address }}<br>{{ ship_to_contact }}</div>
+      </td>
+      <td style="width:2%;"></td>
+      <td class="party-box">
+        <div class="party-title">Bill To</div>
+        <div class="party-body"><strong>{{ bill_to_name }}</strong><br>{{ bill_to_address }}<br>{{ bill_to_contact }}</div>
+      </td>
+    </tr>
+  </table>
+
+  <table class="meta-row-table">
+    <tr>
+      <td class="meta-cell"><span class="meta-cell-label">Payment Terms</span><span class="meta-cell-val">{{ payment_terms }}</span></td>
+      <td class="meta-cell"><span class="meta-cell-label">Shipping Method</span><span class="meta-cell-val">{{ shipping_method }}</span></td>
+      <td class="meta-cell"><span class="meta-cell-label">FOB Point</span><span class="meta-cell-val">{{ fob_point }}</span></td>
+      <td class="meta-cell"><span class="meta-cell-label">Currency</span><span class="meta-cell-val">{{ currency }}</span></td>
+    </tr>
+  </table>
+
+  <table class="items">
+    <thead>
+      <tr>
+        <th style="width:5%;">Item #</th>
+        <th style="width:12%;">Part / SKU</th>
+        <th>Description</th>
+        <th class="center" style="width:7%;">Qty</th>
+        <th class="center" style="width:7%;">Unit</th>
+        <th class="right" style="width:12%;">Unit Price</th>
+        <th class="right" style="width:13%;">Extended</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr{% if loop.index is even %} class="alt"{% endif %}>
+        <td>{{ loop.index }}</td>
+        <td>{{ item.sku }}</td>
+        <td>{{ item.description }}</td>
+        <td class="center">{{ item.qty }}</td>
+        <td class="center">{{ item.unit }}</td>
+        <td class="right">${{ "%.2f"|format(item.unit_price) }}</td>
+        <td class="right">${{ "%.2f"|format(item.qty * item.unit_price) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <table class="totals-table">
+    <tr><td class="lbl">Subtotal</td><td class="amt">${{ "%.2f"|format(subtotal) }}</td></tr>
+    <tr><td class="lbl">Shipping &amp; Handling</td><td class="amt">${{ "%.2f"|format(shipping_cost) }}</td></tr>
+    <tr class="grand"><td class="lbl">Order Total</td><td class="amt">${{ "%.2f"|format(total) }}</td></tr>
+  </table>
+
+  <div class="terms-section">
+    <div class="terms-title">Terms &amp; Conditions</div>
+    {{ terms }}
+  </div>
+
+  <table class="sig-table">
+    <tr>
+      <td style="width:45%;">
+        <div class="sig-line"></div>
+        <div class="sig-label">Authorized Signature &nbsp; {{ approver_name }}</div>
+      </td>
+      <td style="width:10%;"></td>
+      <td style="width:45%;">
+        <div class="sig-line"></div>
+        <div class="sig-label">Date</div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

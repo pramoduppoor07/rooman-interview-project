@@ -9,8 +9,8 @@ pytesseract>=0.3.10
 pdf2image>=1.17.0
 Pillow>=10.0.0
 
-# PDF generation
-weasyprint>=62.0
+# PDF generation (pure-Python, no system DLLs required on Windows)
+xhtml2pdf>=0.2.11
 
 # Validation
 pydantic>=2.5.0
