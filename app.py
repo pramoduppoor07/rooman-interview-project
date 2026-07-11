@@ -57,13 +57,14 @@ if run and pdf_path:
     flags = result["flags"]
 
     # Header status
+    doc_type_label = (doc.get("doc_type") or "unknown").upper()
     if result["ok"]:
-        st.success(f"Passed validation — {doc.get('doc_type', 'unknown').upper()}")
+        st.success(f"Passed validation — {doc_type_label}")
     else:
-        st.warning(f"{len(flags)} validation issue(s) — {doc.get('doc_type', 'unknown').upper()}")
+        st.warning(f"{len(flags)} validation issue(s) — {doc_type_label}")
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("Doc Type", doc.get("doc_type", "—").replace("_", " ").title())
+    col1.metric("Doc Type", (doc.get("doc_type") or "—").replace("_", " ").title())
     col2.metric("Doc Number", doc.get("doc_number") or "—")
     col3.metric("PDF Format", result["doc_format"].title())
 
