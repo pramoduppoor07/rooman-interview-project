@@ -4,10 +4,16 @@ System dependencies required:
   - Tesseract OCR binary: https://github.com/tesseract-ocr/tesseract#installing-tesseract
   - Poppler (Windows): https://github.com/oschwartz10612/poppler-windows/releases
 """
+import os
 from pathlib import Path
 from PIL import Image
 import pytesseract
 from pytesseract import TesseractNotFoundError
+
+# Allow overriding the Tesseract binary path via .env (TESSERACT_CMD=C:\...\tesseract.exe)
+_cmd = os.environ.get("TESSERACT_CMD")
+if _cmd:
+    pytesseract.pytesseract.tesseract_cmd = _cmd
 
 try:
     from pdf2image import convert_from_path
