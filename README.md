@@ -16,24 +16,110 @@ No Python, no system binaries, no PATH issues. Everything is bundled in the imag
 
 **Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running. That's it.
 
+#### 1. Clone the repo
+
 ```bash
-# 1. Clone the repo
 git clone https://github.com/pramoduppoor07/rooman-interview-project.git
 cd rooman-interview-project
-
-# 2. Add your Groq API key
-echo "GROQ_API_KEY=your_key_here" > .env
-
-# 3. Build and start
-docker compose up --build
 ```
 
-Open `http://localhost:8501` in your browser.
+#### 2. Add your Groq API key
 
-- Sample PDFs are auto-generated on first start
-- Results are saved to `./results/` on your machine (mounted volume)
-- To stop: `Ctrl+C` then `docker compose down`
-- To rebuild after code changes: `docker compose up --build`
+Create a `.env` file in the project root:
+
+```bash
+# Windows (PowerShell)
+echo "GROQ_API_KEY=your_key_here" > .env
+
+# Linux / Mac
+echo "GROQ_API_KEY=your_key_here" > .env
+```
+
+Or create the file manually with this content:
+
+```
+GROQ_API_KEY=your_key_here
+```
+
+Get a free key at [console.groq.com](https://console.groq.com) → API Keys → Create.
+
+#### 3. Build the image
+
+```bash
+docker compose build
+```
+
+This takes 3–5 minutes the first time (downloads base image, installs Tesseract, Poppler, and all Python packages). Subsequent builds are fast due to layer caching.
+
+#### 4. Start the application
+
+```bash
+docker compose up
+```
+
+On first start the container automatically generates all 7 sample PDFs, then launches the Streamlit viewer.
+
+Open **`http://localhost:8501`** in your browser.
+
+#### 5. Use the app
+
+- **Streamlit viewer** — already open at `http://localhost:8501`
+  - Select a sample from the dropdown or upload your own PDF / image
+  - Click **Extract** to run the full pipeline
+
+- **Batch CLI** — run inside the container:
+  ```bash
+  docker compose exec app python -m src.cli process samples/generated/ --output results/
+  ```
+  Results are saved to `./results/` on your local machine.
+
+#### Where files live
+
+| Path on your machine | What it contains |
+|---|---|
+| `./samples/generated/` | Auto-generated sample PDFs (written by container on first start) |
+| `./results/` | Extracted JSON output and `summary.json` from batch runs |
+| `.env` | Your API key — never copied into the image |
+
+#### Common commands
+
+```bash
+# Start in background (detached)
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop the container
+docker compose down
+
+# Rebuild after code changes
+docker compose up --build
+
+# Open a shell inside the container
+docker compose exec app sh
+
+# Run the Groq client test inside the container
+docker compose exec app python -m src.llm.test_groq
+```
+
+#### Build details (multi-stage)
+
+The Dockerfile uses a two-stage build to keep the final image small and secure:
+
+```
+Stage 1 — builder
+  python:3.11-slim + gcc/g++
+  Installs all Python packages into /opt/venv
+  (build tools never reach the final image)
+
+Stage 2 — final
+  python:3.11-slim
+  Adds Tesseract OCR + Poppler (runtime only)
+  Copies /opt/venv from Stage 1
+  Runs as non-root user (appuser)
+  Exposes port 8501
+```
 
 ---
 
