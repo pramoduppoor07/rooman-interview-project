@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Target the final stage explicitly
+      target: final
+
+    image: document-extractor:latest
+
+    ports:
+      - "8501:8501"
+
+    # Inject secrets from .env file — never baked into the image
+    env_file:
+      - .env
+
+    # Mount output directories so generated files persist on the host
+    # even if the container is rebuilt or removed
+    volumes:
+      - ./results:/app/results
+      - ./samples/generated:/app/samples/generated
+
+    restart: unless-stopped
+
+    # docker compose up will wait for the health check to pass
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

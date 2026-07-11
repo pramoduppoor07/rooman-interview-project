@@ -6,6 +6,39 @@
 
 ## How to Run This Project
 
+Two ways to run — Docker (recommended, zero setup) or Python directly.
+
+---
+
+### Option A — Docker (recommended)
+
+No Python, no system binaries, no PATH issues. Everything is bundled in the image — including Tesseract OCR and Poppler.
+
+**Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running. That's it.
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/pramoduppoor07/rooman-interview-project.git
+cd rooman-interview-project
+
+# 2. Add your Groq API key
+echo "GROQ_API_KEY=your_key_here" > .env
+
+# 3. Build and start
+docker compose up --build
+```
+
+Open `http://localhost:8501` in your browser.
+
+- Sample PDFs are auto-generated on first start
+- Results are saved to `./results/` on your machine (mounted volume)
+- To stop: `Ctrl+C` then `docker compose down`
+- To rebuild after code changes: `docker compose up --build`
+
+---
+
+### Option B — Python directly
+
 ### Prerequisites
 
 - Python 3.10 or higher
