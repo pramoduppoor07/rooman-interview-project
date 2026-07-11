@@ -29,7 +29,7 @@ def process(folder: Path, output: Path):
     output.mkdir(parents=True, exist_ok=True)
     summary: list[dict] = []
 
-    click.echo(f"Processing {len(pdfs)} PDF(s) from {folder} → {output}\n")
+    click.echo(f"Processing {len(pdfs)} PDF(s) from {folder} -> {output}\n")
 
     for pdf in sorted(pdfs):
         click.echo(f"  {pdf.name} ...", nl=False)

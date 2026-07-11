@@ -42,7 +42,7 @@
       {% for item in items %}
       <tr>
         <td class="desc">{{ item.name }}</td>
-        <td class="qty">x{{ item.qty }}</td>
+        <td class="qty">x{{ item.qty }} @ ${{ "%.2f"|format(item.price) }}</td>
         <td class="price">${{ "%.2f"|format(item.qty * item.price) }}</td>
       </tr>
       {% endfor %}
