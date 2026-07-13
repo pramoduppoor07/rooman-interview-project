@@ -1,4 +1,5 @@
 """End-to-end document extraction pipeline."""
+from __future__ import annotations
 from pathlib import Path
 from src.extractor.detect import detect_doc_type
 from src.extractor.native import extract_native

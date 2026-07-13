@@ -4,6 +4,7 @@ System dependencies required:
   - Tesseract OCR binary: https://github.com/tesseract-ocr/tesseract#installing-tesseract
   - Poppler (Windows): https://github.com/oschwartz10612/poppler-windows/releases
 """
+from __future__ import annotations
 import os
 from pathlib import Path
 from PIL import Image

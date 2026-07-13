@@ -1,4 +1,5 @@
 """Streamlit viewer for the document extraction pipeline."""
+from __future__ import annotations
 import json
 from pathlib import Path
 import streamlit as st

@@ -1,4 +1,5 @@
 """Extract text and tables from native (embedded-text) PDFs using pdfplumber."""
+from __future__ import annotations
 from pathlib import Path
 import pdfplumber
 

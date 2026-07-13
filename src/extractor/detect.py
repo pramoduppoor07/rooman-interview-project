@@ -1,4 +1,5 @@
 """Detect whether a PDF contains native (embedded) text or is image/scanned."""
+from __future__ import annotations
 from pathlib import Path
 import pdfplumber
 
